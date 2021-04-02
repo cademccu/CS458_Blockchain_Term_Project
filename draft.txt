@@ -1,0 +1,46 @@
+Do we want to create a DAPP? Or would the features and planning of this smart contract or blockchain be sufficient?
+
+-- what motivates people to ‘mine’ on this platform?
+
+--  could this be part proof of concept, part research into execution?
+
+---- could be expanded to work w titles, other DMV features
+
+
+Title: Creating a smart contract and DAPP that creates a modern license and identification system.
+
+Team members: (tag urself)
+
+Cade McCumber
+
+Summary description:
+
+To use 
+
+
+Motivation: The difficulty of licensing, both with obtaining a license, and updating the information current to your own identity. In addition, it can reduce the use of fake identification, since ID’s will have to be minted into the blockchain to be valid. 
+
+Summary of complexity:
+
+* The creation of a solidity smart contract that accomplishes the functions associated with our purpose
+
+* The creation of a DAPP that can retrieve basic information via a user interface, or a QR code. (Could just do one or another, not sure which would be easier, QR code might prove the concept better).
+
+*A summary of scalability, other potential uses, problems, vulnerabilities and ways the system could be abused. Additionally other logistics, like incentive structure around ‘Mining’
+
+Project goals:
+
+*The primitive barcodes on most forms of identification can be replaced with QR codes or some similar schema that can both validate the authenticity of the id, and retrieve updated and current information about an individual.
+
+* To create a 2-party smart contract, where information can be updated asynchronously but must be signed off on by both parties to become valid. (ex. State government and individual)
+
+
+How they will be reached:
+
+
+Lots of coding, coffee, and I assume at least some alcohol and late nights?
+
+Workload distribution:
+
+Discord collab sessions? Probs make this a little vague, since not sure how everything could be split up as of yet
+
