@@ -36,8 +36,8 @@
       ]
     },
     "/home/yosief/WebstormProjects/CS458_Blockchain_Term_Project/liscense/contracts/userLicense.sol": {
-      "lastModificationDate": 1618959137811,
-      "contentHash": "83027d8b567e0a5c9b1ddd79b428cc1e",
+      "lastModificationDate": 1619122745081,
+      "contentHash": "77d7fc78548f735c5374a74524437119",
       "sourceName": "contracts/userLicense.sol",
       "solcConfig": {
         "version": "0.7.3",
@@ -62,7 +62,8 @@
         }
       },
       "imports": [
-        "hardhat/console.sol"
+        "hardhat/console.sol",
+        "./Storage.sol"
       ],
       "versionPragmas": [
         ">=0.5.0 <0.7.4"
@@ -103,6 +104,40 @@
       ],
       "artifacts": [
         "console"
+      ]
+    },
+    "/home/yosief/WebstormProjects/CS458_Blockchain_Term_Project/liscense/contracts/Storage.sol": {
+      "lastModificationDate": 1619122579163,
+      "contentHash": "f173189c350074f085acedf8cfcaa91b",
+      "sourceName": "contracts/Storage.sol",
+      "solcConfig": {
+        "version": "0.7.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.7.3"
+      ],
+      "artifacts": [
+        "Storage"
       ]
     }
   }
