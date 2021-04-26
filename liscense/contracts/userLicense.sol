@@ -1,95 +1,51 @@
 pragma solidity >=0.5.0 <0.7.4;
 
 import "hardhat/console.sol";
+import "./Storage.sol";
 
-contract UserLicense  {
-  //////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
-  // DUDE THIS ABSOLUTELY SLAPS
-  // I'm going to merge some of my ideas into here to see what you think.
-  // Gonna keep em seperated by the comment here though. Probs wont compile here,
-  // just putting this in so we can sort out some ideas. CKM
 
-  // This may be too complex for our proof of concept but here is the struct
-  struct Liscense_Full {
-    uint256 ID_NUMBER; /// do we want to include the ID in the struct?
-    string first_name;
-    string last_name;
-    uint64 birth_year; /// pack these 6 into a single space (256)
-    uint32 birth_month;
-    uint32 birth_day;
-    uint64 exp_year;
-    uint32 exp_month;
-    uint32 exp_day;
-    enum Gender { FEMALE, MALE, OTHER } // its 2021 babey
-    string street_address;
-    string city;
-    string state;
-  }
 
-  // I was thinking we could use the publisher as the defacto 'DMV', I.E. someone
-  // who could access all the details of the users too. Or modify things.
-  // or both DMV and user are needed to modify things. Anyways we can use a
-  // constructor to set a state variable since it is only used once.
-  address DMV; // need to be 'payable'?
+contract UserLicense is Storage {
+
+
+  address DMV;// need to be 'payable'?
+  event BasicRequest(string first_name, string last_name, uint64 birth_year, uint32 birth_month, uint32 birth_day);
+  event FullRequest(uint256 _ID_NUMBER, string _first_name, string _last_name, uint64 _birth_year,uint32 _birth_month ,uint32 _birth_day,
+uint64 _exp_year, uint32 _exp_month, uint32 _exp_day, string _street_address, string  _city, string _state);
+  event NewLicense(string first_name, string last_name, uint256 ID_NUMBER);
   constructor() public {
     DMV = msg.sender;
-  } // continued down yonder 
-  // Intresting thing i learned is that msg.sender can be a contract address...
-  // meaning another contract can call this one. So one way we could implement
-  // permissions is that a contract is the 'DMV', and we could make a DAPP that
-  // users have to log in with DMV creditials or whatever, and if they do, they
-  // can use the DAPP to interact with the DMV contract, and then subsequently
-  // access this contract. {IDEA} we should also have seperate methods for DMVs
-  // access and a users access.
-
-
-  // Thinking of this mapping to get the user's Liscense
-  mapping(uint256 => Liscense_Full) private get_liscense; /// ID_NUMBER
-  // Then you can only get the ID number if you have the address
-  mapping(address => uint256) private ID_numbers;
-  // function to get the basic stuff back (through smaller struct or key value stuff???)
-  function getBasicInformation(uint256 id) public view returns(Liscense_basic) {
-    // do stuff
   }
 
-  function getFullInformation(uint256 id, address user) public view returns(Liscense2) {
+  function getBasicInformation(uint256 id) public view { //Full)
+      Liscense storage u_license = get_liscense[id];
+      emit BasicRequest(u_license.first_name, u_license.last_name, u_license.birth_year, u_license.birth_month, u_license.birth_day);
+  }
+
+  function getFullInformation(uint256 id, address user) public view {//view returns(Liscense)
     require (licenseToOwner[user] == id); // probs not exactly this but ya get the point
     // OR
     require (msg.sender == DMV); // so DMV (or authorized point of contact) can access
-    // do stuff
+      Liscense storage u_license =  get_liscense[id];
+    emit FullRequest(u_license.ID_NUMBER, u_license.first_name, u_license.last_name, u_license.birth_year, u_license.birth_month, u_license.birth_day, u_license.exp_year,
+        u_license.exp_month, u_license.exp_day, u_license.street_address, u_license.city, u_license.state);
   }
-
-  //
-  //////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
-
-
-    event NewLicense(string name, string dob);
-
-
-    struct License {
-        string name;
-        string dob;
-    }
-
-    License[] public licenses;
-
-    mapping (address => uint) public licenseToOwner;
-    mapping (address => bool) public ownerHasLicense;
-
 
 //Checks if sender already owns a license. If false it adds a new license to the
 //list and maps its location on the list and sets caller's ownerToLicense to true
-    function createLicense(string memory _name, string memory _dob) public {
+//Ugliest paramater line i've ever typed into existence researching alternatives but its gross for now
+    function createLicense(uint256 _ID_NUMBER, string memory _first_name, string memory _last_name, uint64 _birth_year,uint32 _birth_month ,uint32 _birth_day,
+                           uint64 _exp_year, uint32 _exp_month, uint32 _exp_day, string memory _street_address, string memory _city, string memory _state) public {
+       //need some method to create random unique ID
         require(ownerHasLicense[msg.sender] == false);
-        licenses.push(License(_name, _dob));
-        uint256 id = licenses.length - 1;
+      //here we go again
+        //had coded MALE for gender due to solidity compiling error with enums in parameter, will fix later
+        get_liscense[_ID_NUMBER] = Liscense(_ID_NUMBER, _first_name, _last_name, _birth_year, _birth_month, _birth_day, _exp_year, _exp_month, _exp_day, _street_address,
+                                   _city, _state, Gender.MALE);
+        uint256 id = get_liscense.length - 1;
         licenseToOwner[msg.sender] = id;
         ownerHasLicense[msg.sender] = true;
-        emit NewLicense(_name, _dob);
+        emit NewLicense(_first_name, _last_name, _ID_NUMBER);
     }
 
 }
