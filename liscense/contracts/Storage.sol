@@ -5,26 +5,21 @@ contract Storage {
 
   // @notice This mapping should convert address to an ID/Liscense number
   //mapping(address => uint256) private ID_numbers; not sure we need this
-  mapping(uint256 => Liscense) internal get_liscense;
+  uint64 count;
+  mapping(uint256 => License) public get_license;
   mapping (address => uint) public licenseToOwner;
   mapping (address => bool) public ownerHasLicense;
   enum Gender { FEMALE, MALE, OTHER }
 
   // @notice This is the data structure for storing relevant information
   // about an idividual
-  struct Liscense {
+  struct License {
     uint256 ID_NUMBER; // primary key of sorts
-    string first_name;
-    string last_name;
-    uint64 birth_year; // pack these 6 into a single space.
-    uint32 birth_month;
-    uint32 birth_day;
-    uint64 exp_year;
-    uint32 exp_month;
-    uint32 exp_day;
+    string name;
+    string dob;
+    string exp_date;
     string street_address;
-    string city;
-    string state;
+    string city_state;
     Gender gender;
   }
 

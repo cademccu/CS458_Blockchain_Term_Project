@@ -36,8 +36,8 @@
       ]
     },
     "/home/yosief/WebstormProjects/CS458_Blockchain_Term_Project/liscense/contracts/userLicense.sol": {
-      "lastModificationDate": 1619122745081,
-      "contentHash": "77d7fc78548f735c5374a74524437119",
+      "lastModificationDate": 1619481777441,
+      "contentHash": "9d49fd8fb861aafdb42651b296b4457b",
       "sourceName": "contracts/userLicense.sol",
       "solcConfig": {
         "version": "0.7.3",
@@ -107,8 +107,8 @@
       ]
     },
     "/home/yosief/WebstormProjects/CS458_Blockchain_Term_Project/liscense/contracts/Storage.sol": {
-      "lastModificationDate": 1619122579163,
-      "contentHash": "f173189c350074f085acedf8cfcaa91b",
+      "lastModificationDate": 1619481571137,
+      "contentHash": "123668f8855531afa3644b26e879cb72",
       "sourceName": "contracts/Storage.sol",
       "solcConfig": {
         "version": "0.7.3",
