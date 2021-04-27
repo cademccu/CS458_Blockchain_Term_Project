@@ -1,16 +1,18 @@
+// SPDX-License-Identifier: CSU Blockchain final project
 pragma solidity >=0.5.0 <0.7.4;
 
 import "hardhat/console.sol";
-import "./Storage.sol";
+import "./licenseDetails.sol";
 
 
 
-contract UserLicense is Storage {
+contract UserLicense is licenseDetails {
 
 
   address DMV;// need to be 'payable'?
   event NewLicense(string name, uint256 ID_NUMBER);
-  constructor() public {
+
+  constructor() {
     DMV = msg.sender;
   }
 
