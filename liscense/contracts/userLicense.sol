@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: CSU Blockchain final project
-pragma solidity >=0.5.0 <0.7.4;
+pragma solidity >=0.5.0 <=0.8.0; //<0.7.4;
 
 import "hardhat/console.sol";
 import "./licenseDetails.sol";
@@ -31,7 +31,8 @@ contract UserLicense is licenseDetails {
 //Checks if sender already owns a license. If false it adds a new license to the
 //list and maps its location on the list and sets caller's ownerToLicense to true
 //Ugliest paramater line i've ever typed into existence researching alternatives but its gross for now
-    function createLicense(uint256 _ID_NUMBER, string memory _name, string memory _dob, string memory _exp_date, string memory _address, string memory city_state) public {
+    function createLicense(uint256 _ID_NUMBER, string memory _name, string memory _dob,
+      string memory _exp_date, string memory _address, string memory city_state) public {
        //need some method to create random unique ID
         require(ownerHasLicense[msg.sender] == false);
       //here we go again
