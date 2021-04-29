@@ -21,7 +21,6 @@ contract dmvController {
   }
 
   function getUserLicenseAddress() public view returns(address) {
-    // not sure if we need this require
     require(msg.sender == owner, "Only the DMV can call this contract.");
     return address(liscenseContractAddress); // return should be okay? could emit event
   }
