@@ -4,13 +4,15 @@ A repository dedicated to our Blockchain term project, Spring semester 2021
 
 
 
-### NOTES
-
-Currenty using compiler 0.7.3, it was the most current one when I created the blank project with hardhat. Might want to change that to the one used in the oracle project but not sure.
-
-There is not Apps directory yet for .js projects.
-
-All this does currently is compile a "hello world" contract. Just created this as the fondation to start writing files.
+### To deploy with Infura and Rinkyby:
+* Log into infura using your Metamask account. 
+* Create a new project in Infura.
+* Set the network to Rinkeby.
+* Copy the https endpoint from the project. Paste it into the license/hardhat.config.js file in the Infura project location.
+* Get your private key from Metamask. (DO NOT CHECK THIS FILE IN WITH YOUR PRIVATE KEY!) Paste into private key area in license/hardhat.config.js
+* From license directory, run ./deploy.sh (or the command below under \'DEPLOY]\'.
+* Copy the contract address that is logged to the terminal, this is now the address of the deployed contract.
+* You can test this functionality with the ABI and the address in oneclickdapp.com
 
 
 ### COMPILE
@@ -19,7 +21,15 @@ All this does currently is compile a "hello world" contract. Just created this a
 npx hardhat compile
 ```
 
-### RUN
+### TEST
+
+```
+npx hardhat test
+```
+
+### DEPLOY
 ```
 npx hardhat run scripts/deploy.js --network rinkeby
 ```
+
+Additionally, scripts are available in the license directory to run these commands for you.
