@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# yes, i really am this lazy
+
+clear && npx hardhat test

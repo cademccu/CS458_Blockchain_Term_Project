@@ -13,8 +13,13 @@ There is not Apps directory yet for .js projects.
 All this does currently is compile a "hello world" contract. Just created this as the fondation to start writing files.
 
 
-### RUN
+### COMPILE
 
 ```
 npx hardhat compile
+```
+
+### RUN
+```
+npx hardhat run scripts/deploy.js --network rinkeby
 ```
