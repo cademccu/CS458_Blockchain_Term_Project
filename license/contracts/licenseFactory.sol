@@ -30,7 +30,7 @@ contract LicenseFactory {
 
   License[] internal licenses;
 
-  constructor() {
+  constructor() public {
     DMV = msg.sender;
     count = 0;
   }

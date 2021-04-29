@@ -15,7 +15,7 @@ contract dmvController {
   address owner;
 
   // creates the address, thus saving it in this contract and the next
-  constructor() {
+  constructor() public {
     liscenseContractAddress = new LicenseFactory();
     owner = msg.sender; // save as owner.
   }
