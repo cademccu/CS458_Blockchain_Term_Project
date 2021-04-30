@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Modal } from 'semantic-ui-react'
-import LicenseInfoCard from './licenseInfoCard';
+import { Modal, Button } from 'semantic-ui-react'
 
 class LicenseModal extends Component {
     constructor(props) {
@@ -18,15 +17,14 @@ class LicenseModal extends Component {
     render() {
         return(
             <Modal
-                onClose={() => this.setOpen(false)}
-                open={this.state.open}
-                trigger={<Button>Show Modal</Button>}
+                onClose={() => this.props.close()}
+                open={this.props.open}
             >
                 <Modal.Content>
                     {this.props.license}
                 </Modal.Content>
                 <Modal.Actions>
-                    <Button color='black' onClick={() => this.setOpen(false)}>
+                    <Button color='black' onClick={() => this.props.close()}>
                         Close
                     </Button>
                 </Modal.Actions>

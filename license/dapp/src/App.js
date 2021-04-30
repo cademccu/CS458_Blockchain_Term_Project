@@ -3,6 +3,7 @@ import initBlockchain from "./utils/initBlockchain";
 import licensInforCard from "./licenseInfoCard";
 import { assert } from "chai";
 import LicenseInfoCard from "./licenseInfoCard";
+import LicenseModal from "./LicenseModal";
 // import getZombieCount from "./utils/getZombieCount";
 
 // import { HashRouter, Route } from "react-router-dom";
@@ -40,7 +41,9 @@ class App extends Component {
         this.state={
             idSearch: '',
             hasLicense: false,
-            fullInfo: ['']
+            fullInfo: [''],
+            basicInfo: ['',''],
+            basicInfoOpen: false,
         };
     }
     componentDidMount = async () => {
@@ -110,9 +113,9 @@ class App extends Component {
         try{
             let basicInfo = await this.state.DMVInfo.LF.getBasicInformation(this.state.idSearch);
         // alert(basicInfo);
-            this.setState({basicInfo:basicInfo});
+            this.setState({basicInfo:basicInfo, basicInfoOpen:true});
         } catch(error) {
-            this.setState({basicInfo:null});
+            this.setState({basicInfo:['',''], basicInfoOpen: false});
         }
 
     };
@@ -122,6 +125,9 @@ class App extends Component {
         // console.log("***************** idSearch: ", this.state.idSearch);
     };
 
+    closeBasicInfoModal = () =>{
+        this.setState({basicInfoOpen: false});
+    };
 
   // **************************************************************************
   //
@@ -140,19 +146,23 @@ class App extends Component {
         </div>
     );
     let basicInfoDisplay;
-    console.log("****************** Basic info: ", this.state.basicInfo);
-    if(this.state.basicInfo){
-        basicInfoDisplay = (
-            <LicenseInfoCard
-                name={this.state.basicInfo[0]}
-                dob={this.state.basicInfo[1]}
-                lId={this.state.idSearch} />
-        );
-    }
-    else {
-        console.log('false');
-        basicInfoDisplay = ('');
-    }
+    console.log("****************** Basic info: ", this.state.basicInfoOpen);
+    // if(this.state.basicInfoOpen){
+    //     basicInfoDisplay = (
+    //         <LicenseModal
+    //             open={this.state.basicInfoOpen}
+    //             license={<LicenseInfoCard
+    //                 name={this.state.basicInfo[0]}
+    //                 dob={this.state.basicInfo[1]}
+    //                 lId={this.state.idSearch} />}
+    //         />
+            
+    //     );
+    // }
+    // else {
+    //     console.log('false');
+    //     basicInfoDisplay = ('');
+    // }
 
     return (
         <div>
@@ -175,7 +185,16 @@ class App extends Component {
                 </div>
                 <button className="ui button" type="submit">Submit</button>
             </form>
-            {basicInfoDisplay}
+            
+            
+            <LicenseModal
+                open={this.state.basicInfoOpen}
+                close={this.closeBasicInfoModal}
+                license={<LicenseInfoCard
+                    name={this.state.basicInfo[0]}
+                    dob={this.state.basicInfo[1]}
+                    lId={this.state.idSearch} />}
+            />
 
              
         </div>
