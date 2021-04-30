@@ -40,8 +40,11 @@ class App extends Component {
     componentDidMount = async () => {
       try {
           const DMVInfo = await initBlockchain(); // from utils directory;  connect to provider and to metamask or other signer
-          let hasLicence = await DMVInfo.LF.ownerHasLicense(DMVInfo.userAddress);
-          this.setState({DMVInfo: DMVInfo, hasLicence: hasLicence});
+          let hasLicense = await DMVInfo.LF.ownerHasLicense(DMVInfo.userAddress);
+          this.setState({DMVInfo: DMVInfo, hasLicence: hasLicense});
+          if(typeof this.state.hasLicense == "undefined") {
+              console.log("The hasLicense flag is undefined");
+          }
           //await getZombieCount(DMVInfo.DMV, DMVInfo.userAddress); // get user count and total count of zombies
       } catch (error) {
           // Catch any errors for any of the above operations.
@@ -81,7 +84,6 @@ class App extends Component {
   // **************************************************************************
 
   render() {
-    console.log("**************************", (typeof this.state.hasLicense == "undefined"));
     if(this.state.hasLicense) {
         return (
             <div>
