@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import initBlockchain from "./utils/initBlockchain";
 import licensInforCard from "./licenseInfoCard";
+import { assert } from "chai";
 // import getZombieCount from "./utils/getZombieCount";
 
 // import { HashRouter, Route } from "react-router-dom";
@@ -33,18 +34,23 @@ class App extends Component {
   //
   // **************************************************************************
 
-    state = {
-      loading: false,
-    };
+    constructor(props){
+        super(props);
+        this.state={
+            idSearch: '',
+            hasLicense: false,
 
+        };
+    }
     componentDidMount = async () => {
       try {
           const DMVInfo = await initBlockchain(); // from utils directory;  connect to provider and to metamask or other signer
           let hasLicense = await DMVInfo.LF.ownerHasLicense(DMVInfo.userAddress);
-          this.setState({DMVInfo: DMVInfo, hasLicence: hasLicense});
-          if(typeof this.state.hasLicense == "undefined") {
-              console.log("The hasLicense flag is undefined");
-          }
+          //console.log("**Setting hasLicense to ", hasLicense);
+          this.setState({DMVInfo: DMVInfo, hasLicense: hasLicense});
+        //   if(typeof this.state.hasLicense == "undefined") {
+        //       console.log("The hasLicense flag is undefined: ", this.state.hasLicence);
+        //   }
           //await getZombieCount(DMVInfo.DMV, DMVInfo.userAddress); // get user count and total count of zombies
       } catch (error) {
           // Catch any errors for any of the above operations.
@@ -54,6 +60,10 @@ class App extends Component {
     };
 
     displayCreateLicense = async () => {
+        if (this.state.hasLicense){
+            console.log("has license and can't create another");
+            return;
+        }
         try {
             await this.state.DMVInfo.LF.createLicense("test",
                 "01/01/01",
@@ -61,6 +71,7 @@ class App extends Component {
                 "1234 anywhere st",
                 "some city, CO",
                 "Attack helicopter");
+                this.setState({hasLicense: true});
         } catch (err) {
             console.log("heres the exception: ", err);
         }
@@ -68,12 +79,27 @@ class App extends Component {
 
     displayFullInformation = async () => {
         try {
-            let x = await this.state.DMVInfo.LF.getFullInformation(0);
+            const id = await this.state.DMVInfo.LF.ownerToLicense(this.state.DMVInfo.userAddress);
+            let x = await this.state.DMVInfo.LF.getFullInformation(id);
             console.log(x);
         } catch (err) {
             console.log("here's the exception: ", err);
         }
     }
+
+    submitFunction = async (event) => {
+        //alert(this.state.idSearch);
+        alert('beg');
+        console.log("***", this.state.idSearch);
+        let basicInfo = await this.state.DMVInfo.LF.getBasicInformation(this.state.idSearch);
+        alert("hi");
+        alert(basicInfo);
+        this.setState({basicInfo:basicInfo});
+    };
+
+    idLookupChange = async (event) => {
+        this.setState({idSearch: event.target.value});
+    };
 
 
   // **************************************************************************
@@ -84,28 +110,47 @@ class App extends Component {
   // **************************************************************************
 
   render() {
-    if(this.state.hasLicense) {
-        return (
-            <div>
-                <h1>it worked</h1>
-                <button onClick={this.displayFullInformation}>
-                    Display Full Information
-                </button>
-            </div>
+    const displayFullInfoButton = (
+        <div>
+            <h1>display</h1>
+            <button onClick={this.displayFullInformation} disabled={!this.state.hasLicense}>
+                Display Full Information
+            </button>
+        </div>
+    );
+    const createLicenseButton = (
+        <div>
+            <h1>create</h1>
+            <button onClick={this.displayCreateLicense} disabled={this.state.hasLicense}>
+                Create License
+            </button>
+        </div>
+    );
+    let basicInfoDisplay;
+    if(this.state.basicInfo){
+        basicInfoDisplay = (
+            <label>{this.state.basicInfo[0]}</label>
         );
     }
     else {
-        return (
-            <div>
-                <h1>it worked</h1>
-                <button onClick={this.displayCreateLicense}>
-                    Create License
-                </button>
-            </div>
-        );
+        basicInfoDisplay = (<label>nothing</label>);
     }
 
-  }
+    return (
+        <div>
+            {createLicenseButton}
+            {displayFullInfoButton}
+            <form onSubmit={this.submitFunction}>
+                <label>License lookup
+                    <input type="number" value={this.state.idSearch} onChange={this.idLookupChange} />
+                </label>
+                {basicInfoDisplay}
+                <input type="submit" value="Submit" />
+            </form>
+        </div>
+    );
+    }
+
   //   return (
   //     <Provider store={store}>
   //       <HashRouter>

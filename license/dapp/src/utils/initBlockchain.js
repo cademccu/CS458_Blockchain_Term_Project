@@ -65,7 +65,7 @@ const initBlockchain = async () => {
     );
 
    // CZ = new ethers.Contract('0xf01b5d859b2a73DBE407f4553b06ffF50F19b7e4', abi, signer);
-    DMV = new ethers.Contract('0x6C447e198f517a7CB2E30Bd35968D93d65BFfab2', abi, signer);
+    DMV = new ethers.Contract('0xDCaC14a7a30FD6760159d317c7ba11a9E60b318B', abi, signer);
     // put state data into the REDUX store for easy access from other pages and components
 
 
@@ -453,6 +453,7 @@ const initBlockchain = async () => {
     await DMV.deployed();
     let lfAddr = await DMV.getUserLicenseAddress();
     LF = new ethers.Contract(lfAddr, lfAbi, signer);
+    await LF.deployed();
 
 
     let data = { provider, signer, DMV: DMV, LF: LF, userAddress };
