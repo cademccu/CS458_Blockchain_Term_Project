@@ -63,6 +63,15 @@ class App extends Component {
         }
     }
 
+    displayFullInformation = async () => {
+        try {
+            let x = await this.state.DMVInfo.LF.getFullInformation(0);
+            console.log(x);
+        } catch (err) {
+            console.log("here's the exception: ", err);
+        }
+    }
+
 
   // **************************************************************************
   //
@@ -72,8 +81,16 @@ class App extends Component {
   // **************************************************************************
 
   render() {
+    console.log("**************************", (typeof this.state.hasLicense == "undefined"));
     if(this.state.hasLicense) {
-        licensInforCard.render();
+        return (
+            <div>
+                <h1>it worked</h1>
+                <button onClick={this.displayFullInformation}>
+                    Display Full Information
+                </button>
+            </div>
+        );
     }
     else {
         return (
