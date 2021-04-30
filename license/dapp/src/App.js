@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import initBlockchain from "./utils/initBlockchain";
+import licensInforCard from "./licenseInfoCard";
 // import getZombieCount from "./utils/getZombieCount";
 
 // import { HashRouter, Route } from "react-router-dom";
@@ -32,11 +33,15 @@ class App extends Component {
   //
   // **************************************************************************
 
+    state = {
+      loading: false,
+    };
 
     componentDidMount = async () => {
       try {
           const DMVInfo = await initBlockchain(); // from utils directory;  connect to provider and to metamask or other signer
-          this.setState({DMVInfo: DMVInfo})
+          let hasLicence = await DMVInfo.LF.ownerHasLicense(DMVInfo.userAddress);
+          this.setState({DMVInfo: DMVInfo, hasLicence: hasLicence});
           //await getZombieCount(DMVInfo.DMV, DMVInfo.userAddress); // get user count and total count of zombies
       } catch (error) {
           // Catch any errors for any of the above operations.
@@ -45,17 +50,18 @@ class App extends Component {
       }
     };
 
-
-    foo = async () => {
-      await this.state.DMVInfo.LF.createLicense("test",
-        "01/01/01",
-        "01/01/31",
-        "1234 anywhere st",
-        "some city, CO",
-        "Attack helicopter");
-        let x = await this.state.DMVInfo.LF.getBasicInformation(0);
-        console.log("basic info: ", x);
-    };
+    displayCreateLicense = async () => {
+        try {
+            await this.state.DMVInfo.LF.createLicense("test",
+                "01/01/01",
+                "01/01/31",
+                "1234 anywhere st",
+                "some city, CO",
+                "Attack helicopter");
+        } catch (err) {
+            console.log("heres the exception: ", err);
+        }
+    }
 
 
   // **************************************************************************
@@ -66,15 +72,20 @@ class App extends Component {
   // **************************************************************************
 
   render() {
-    return (
-      <div>
-        <h1>it worked</h1>
-        <button onClick={this.foo}>
-          press Me
-        </button>
-      </div>
-      
-    );
+    if(this.state.hasLicense) {
+        licensInforCard.render();
+    }
+    else {
+        return (
+            <div>
+                <h1>it worked</h1>
+                <button onClick={this.displayCreateLicense}>
+                    Create License
+                </button>
+            </div>
+        );
+    }
+
   }
   //   return (
   //     <Provider store={store}>
