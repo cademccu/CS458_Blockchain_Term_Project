@@ -48,9 +48,6 @@ class App extends Component {
           let hasLicense = await DMVInfo.LF.ownerHasLicense(DMVInfo.userAddress);
           //console.log("**Setting hasLicense to ", hasLicense);
           this.setState({DMVInfo: DMVInfo, hasLicense: hasLicense});
-        //   if(typeof this.state.hasLicense == "undefined") {
-        //       console.log("The hasLicense flag is undefined: ", this.state.hasLicence);
-        //   }
           //await getZombieCount(DMVInfo.DMV, DMVInfo.userAddress); // get user count and total count of zombies
       } catch (error) {
           // Catch any errors for any of the above operations.
@@ -88,17 +85,16 @@ class App extends Component {
     }
 
     submitFunction = async (event) => {
-        //alert(this.state.idSearch);
-        alert('beg');
-        console.log("***", this.state.idSearch);
+        event.preventDefault();
         let basicInfo = await this.state.DMVInfo.LF.getBasicInformation(this.state.idSearch);
-        alert("hi");
         alert(basicInfo);
         this.setState({basicInfo:basicInfo});
+
     };
 
     idLookupChange = async (event) => {
-        this.setState({idSearch: event.target.value});
+        await this.setState({idSearch: event.target.value});
+        console.log("***************** idSearch: ", this.state.idSearch);
     };
 
 
@@ -127,6 +123,7 @@ class App extends Component {
         </div>
     );
     let basicInfoDisplay;
+    console.log("****************** Basic info: ", this.state.basicInfo);
     if(this.state.basicInfo){
         basicInfoDisplay = (
             <label>{this.state.basicInfo[0]}</label>
