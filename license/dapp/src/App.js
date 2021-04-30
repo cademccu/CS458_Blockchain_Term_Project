@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import initBlockchain from "./utils/initBlockchain";
 import licensInforCard from "./licenseInfoCard";
 import { assert } from "chai";
+import LicenseInfoCard from "./licenseInfoCard";
 // import getZombieCount from "./utils/getZombieCount";
 
 // import { HashRouter, Route } from "react-router-dom";
@@ -39,7 +40,7 @@ class App extends Component {
         this.state={
             idSearch: '',
             hasLicense: false,
-
+            fullInfo: ['']
         };
     }
     componentDidMount = async () => {
@@ -48,12 +49,31 @@ class App extends Component {
           let hasLicense = await DMVInfo.LF.ownerHasLicense(DMVInfo.userAddress);
           //console.log("**Setting hasLicense to ", hasLicense);
           this.setState({DMVInfo: DMVInfo, hasLicense: hasLicense});
+
+          if (hasLicense) {
+            this.getFullInfo();
+          }
           //await getZombieCount(DMVInfo.DMV, DMVInfo.userAddress); // get user count and total count of zombies
       } catch (error) {
           // Catch any errors for any of the above operations.
           alert(`Failed to load provider, signer, or contract. Check console for details.`);
           console.log(error);
       }
+    };
+
+    async getFullInfo() {
+        try {
+            const id = await this.state.DMVInfo.LF.ownerToLicense(this.state.DMVInfo.userAddress);
+            let x = await this.state.DMVInfo.LF.getFullInformation(id);
+            //console.log("***********", typeof Array.from(x));
+            let fullInfo = Array.from(x);
+            fullInfo.shift();
+            fullInfo.unshift(parseInt(id._hex));
+            console.log(fullInfo);
+            this.setState({fullInfo: fullInfo});
+        } catch (err) {
+            console.log("here's the exception: ", err);
+        }
     };
 
     displayCreateLicense = async () => {
@@ -69,6 +89,7 @@ class App extends Component {
                 "some city, CO",
                 "Attack helicopter");
                 this.setState({hasLicense: true});
+                this.getFullInfo();
         } catch (err) {
             console.log("heres the exception: ", err);
         }
@@ -86,15 +107,19 @@ class App extends Component {
 
     submitFunction = async (event) => {
         event.preventDefault();
-        let basicInfo = await this.state.DMVInfo.LF.getBasicInformation(this.state.idSearch);
-        alert(basicInfo);
-        this.setState({basicInfo:basicInfo});
+        try{
+            let basicInfo = await this.state.DMVInfo.LF.getBasicInformation(this.state.idSearch);
+        // alert(basicInfo);
+            this.setState({basicInfo:basicInfo});
+        } catch(error) {
+            this.setState({basicInfo:null});
+        }
 
     };
 
-    idLookupChange = async (event) => {
-        await this.setState({idSearch: event.target.value});
-        console.log("***************** idSearch: ", this.state.idSearch);
+    idLookupChange = (event) => {
+        this.setState({idSearch: event.target.value});
+        // console.log("***************** idSearch: ", this.state.idSearch);
     };
 
 
@@ -106,14 +131,6 @@ class App extends Component {
   // **************************************************************************
 
   render() {
-    const displayFullInfoButton = (
-        <div>
-            <h1>display</h1>
-            <button onClick={this.displayFullInformation} disabled={!this.state.hasLicense}>
-                Display Full Information
-            </button>
-        </div>
-    );
     const createLicenseButton = (
         <div>
             <h1>create</h1>
@@ -126,27 +143,56 @@ class App extends Component {
     console.log("****************** Basic info: ", this.state.basicInfo);
     if(this.state.basicInfo){
         basicInfoDisplay = (
-            <label>{this.state.basicInfo[0]}</label>
+            <LicenseInfoCard
+                name={this.state.basicInfo[0]}
+                dob={this.state.basicInfo[1]}
+                lId={this.state.idSearch} />
         );
     }
     else {
-        basicInfoDisplay = (<label>nothing</label>);
+        console.log('false');
+        basicInfoDisplay = ('');
     }
 
     return (
         <div>
             {createLicenseButton}
-            {displayFullInfoButton}
-            <form onSubmit={this.submitFunction}>
-                <label>License lookup
-                    <input type="number" value={this.state.idSearch} onChange={this.idLookupChange} />
-                </label>
-                {basicInfoDisplay}
-                <input type="submit" value="Submit" />
+            <LicenseInfoCard 
+                lId={this.state.fullInfo[0]}
+                name={this.state.fullInfo[1]}
+                dob={this.state.fullInfo[2]}
+                expDate={this.state.fullInfo[3]}
+                street={this.state.fullInfo[4]}
+                cityState={this.state.fullInfo[5]}
+                gender={this.state.fullInfo[6]}
+             />
+
+
+            <form className="ui form" onSubmit={this.submitFunction}>
+                <div className="field">
+                    <label>Search basic license info by ID</label>
+                    <input type="text" name="first-name" placeholder="ID" value={this.state.idSearch} onChange={this.idLookupChange} />
+                </div>
+                <button className="ui button" type="submit">Submit</button>
             </form>
+            {basicInfoDisplay}
+
+             
         </div>
     );
     }
+
+//     <div>
+//     <form id="ui form" onSubmit={this.submitFunction}>
+//         <label>License lookup
+//             <input type="number" value={this.state.idSearch} onChange={this.idLookupChange} />
+//         </label>
+//         {basicInfoDisplay}
+//         <input type="submit" value="Submit" />
+//     </form>
+// </div>
+
+
 
   //   return (
   //     <Provider store={store}>
