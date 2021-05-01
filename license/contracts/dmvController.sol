@@ -15,13 +15,13 @@ contract dmvController {
   address owner;
 
   // creates the address, thus saving it in this contract and the next
-  constructor() {
+  constructor() public {
     liscenseContractAddress = new LicenseFactory();
     owner = msg.sender; // save as owner.
   }
 
   function getUserLicenseAddress() public view returns(address) {
-    require(msg.sender == owner, "Only the DMV can call this contract.");
+    //require(msg.sender == owner, "Only the DMV can call this contract.");
     return address(liscenseContractAddress); // return should be okay? could emit event
   }
 

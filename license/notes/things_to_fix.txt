@@ -1,0 +1,4 @@
+In licenseFactory.sol line 39, add a check to see if license exists, otherwise could get array out of bounds
+
+In dmvController.sol line 24, the require statement is wrong, everyone needs to be able to get the licenceContractAddress
+
