@@ -43,7 +43,10 @@ const initBlockchain = async () => {
     "	  ]"
     );
 
-    DMV = new ethers.Contract('0x9712EF176dA8C10Cc076D77D1A5779D415686107', abi, signer);
+    // ****************************************************************************************
+    // Change contract address here if you redeploy
+    // ****************************************************************************************
+    DMV = new ethers.Contract('0x175C9e5f70fCE99D91548FDEEc28a3021F5Bae46', abi, signer);
 
     let LF = null;
     console.log("READ LicenseFactory ABI");
@@ -426,6 +429,7 @@ const initBlockchain = async () => {
 "	  ]"
     );
     
+    // The DMV deploys the LicenseFactory contract.
     await DMV.deployed();
     let lfAddr = await DMV.getUserLicenseAddress();
     LF = new ethers.Contract(lfAddr, lfAbi, signer);

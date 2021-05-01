@@ -105,12 +105,6 @@ class App extends Component {
         this.setState({createLicenseOpen: false});
     };
 
-  // **************************************************************************
-  //
-  // main render routine for App component;
-  //      contains route info to navigate between pages
-  //
-  // **************************************************************************
 
   render() {
 
@@ -151,7 +145,12 @@ class App extends Component {
             <form className="ui form" onSubmit={this.submitFunction}>
                 <div className="field">
                     <label>Search basic license info by ID</label>
-                    <input type="text" name="first-name" placeholder="ID" value={this.state.idSearch} onChange={this.idLookupChange} />
+                    <input  type="text" 
+                            name="first-name" 
+                            placeholder="ID" 
+                            value={this.state.idSearch} 
+                            onChange={this.idLookupChange}
+                            type="number" />
                 </div>
                 <button className="ui button" type="submit">Submit</button>
             </form>

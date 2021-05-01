@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Button } from 'semantic-ui-react';
+import { Modal, Button} from 'semantic-ui-react';
 import App from "./App";
 import initBlockchain from "./utils/initBlockchain";
 
@@ -21,16 +21,6 @@ class CreateLicenseModal extends Component {
     setOpen(open){
         this.setState({open: open});
     }
-
-    // submitFunction = async (event) => {
-    //     event.preventDefault();
-    //     try{
-    //         let basicInfo = await this.state.DMVInfo.LF.getBasicInformation(this.state.idSearch);
-    //         this.setState({basicInfo:basicInfo, basicInfoOpen:true});
-    //     } catch(error) {
-    //         this.setState({basicInfo:['',''], basicInfoOpen: false});
-    //     }
-    // };
 
     nameChange = (event) => {
         this.setState({name: event.target.value});
@@ -85,29 +75,29 @@ class CreateLicenseModal extends Component {
                         backgroundColor: 'cadetblue'
                     }}
                 >
-                    <form className="create form" onSubmit={this.submitFunction}>
-                        <div><label>Name</label></div>
-                        <div>
+                    <form className="ui form" onSubmit={this.submitFunction}>
+                        <div className="field">
+                            <label>Name</label>
                             <input type="text" name="name" placeholder="Name" value={this.state.name} onChange={this.nameChange} />
                         </div>
-                        <div><label>Date Of Birth</label></div>
-                        <div>
+                        <div className="field">
+                            <label>Date Of Birth</label>
                             <input type="text" name="dob" placeholder="Date of birth" value={this.state.dob} onChange={this.dobChange} />
                         </div>
-                        <div><lable>Experation Date</lable></div>
-                        <div>
+                        <div className="field">
+                            <label>Experation Date</label>
                             <input type="text" name="experation date" placeholder="Experation Date" value={this.state.expDate} onChange={this.expDateChange} />
                         </div>
-                        <div><lable>Address</lable></div>
-                        <div>
+                        <div className="field">
+                            <label>Address</label>
                             <input type="text" name="address" placeholder="Address" value={this.state.address} onChange={this.addressChange} />
                         </div>
-                        <div><lable>City and State</lable></div>
-                        <div>
+                        <div className="field">
+                            <label>City and State</label>
                             <input type="text" name="city-state" placeholder="City and State" value={this.state.cityState} onChange={this.cityStateChange} />
                         </div>
-                        <div><lable>Gender</lable></div>
-                        <div>
+                        <div className="field">
+                            <label>Gender</label>
                             <input type="text" name="gender" placeholder="Gender" value={this.state.gender} onChange={this.genderChange} />
                         </div>
                         <button className="ui button" type="submit">Submit</button>
