@@ -1,40 +1,13 @@
 import React, { Component } from "react";
 import initBlockchain from "./utils/initBlockchain";
-import licensInforCard from "./licenseInfoCard";
 import { assert } from "chai";
 import LicenseInfoCard from "./licenseInfoCard";
 import LicenseModal from "./LicenseModal";
-// import getZombieCount from "./utils/getZombieCount";
+import CreateLicenseModal from "./CreateLicenseModal";
 
-// import { HashRouter, Route } from "react-router-dom";
-// import { Container } from "semantic-ui-react";
-// import { Provider } from "react-redux";
-
-// import TopBar from "./components/TopBar";
-
-// import Greeting from "./pages/Greeting";
-// import MyZombieInventory from "./pages/MyZombieInventory";
-// import ZombieInventory from "./pages/ZombieInventory";
-// import AttackZombie from "./pages/AttackZombie";
-// import FeedOnKitty from "./pages/FeedOnKitty";
-// import ChangeName from "./pages/ChangeName";
-// import LevelUp from "./pages/LevelUp";
-// import TransferZombie from "./pages/TransferZombie";
-
-// import store from "./redux/store";
-
-//
-//  This is the main application page; routing is handled to render other pages in the application
+//  Main application page
 
 class App extends Component {
-  // define a state variable for important connectivity data to the blockchain
-  // this will then be put into the REDUX store for retrieval by other pages
-
-  // **************************************************************************
-  //
-  // React will call this routine only once when App page loads; do initialization here
-  //
-  // **************************************************************************
 
     constructor(props){
         super(props);
@@ -44,22 +17,20 @@ class App extends Component {
             fullInfo: [''],
             basicInfo: ['',''],
             basicInfoOpen: false,
+            createLicenseOpen: false,
         };
     }
     componentDidMount = async () => {
       try {
-          const DMVInfo = await initBlockchain(); // from utils directory;  connect to provider and to metamask or other signer
+          const DMVInfo = await initBlockchain();
           let hasLicense = await DMVInfo.LF.ownerHasLicense(DMVInfo.userAddress);
-          //console.log("**Setting hasLicense to ", hasLicense);
           this.setState({DMVInfo: DMVInfo, hasLicense: hasLicense});
 
           if (hasLicense) {
             this.getFullInfo();
           }
-          //await getZombieCount(DMVInfo.DMV, DMVInfo.userAddress); // get user count and total count of zombies
       } catch (error) {
-          // Catch any errors for any of the above operations.
-          alert(`Failed to load provider, signer, or contract. Check console for details.`);
+          alert(`Failed to load provider, signer, or contract.`);
           console.log(error);
       }
     };
@@ -68,14 +39,13 @@ class App extends Component {
         try {
             const id = await this.state.DMVInfo.LF.ownerToLicense(this.state.DMVInfo.userAddress);
             let x = await this.state.DMVInfo.LF.getFullInformation(id);
-            //console.log("***********", typeof Array.from(x));
             let fullInfo = Array.from(x);
             fullInfo.shift();
             fullInfo.unshift(parseInt(id._hex));
             console.log(fullInfo);
             this.setState({fullInfo: fullInfo});
         } catch (err) {
-            console.log("here's the exception: ", err);
+            console.log("Exception: ", err);
         }
     };
 
@@ -98,6 +68,16 @@ class App extends Component {
         }
     }
 
+    createLicense = async (data) => {
+        try {
+            await this.state.DMVInfo.LF.createLicense(data[0], data[1], data[2], data[3], data[4], data[5]);
+            this.setState({hasLicense: true});
+            this.getFullInfo();
+        } catch (error) {
+            console.log("Exception: ", error);
+        }
+    }
+
     displayFullInformation = async () => {
         try {
             const id = await this.state.DMVInfo.LF.ownerToLicense(this.state.DMVInfo.userAddress);
@@ -108,11 +88,14 @@ class App extends Component {
         }
     }
 
+    displayCreateLicenseModal = () => {
+        this.setState({createLicenseOpen: true});
+    }
+
     submitFunction = async (event) => {
         event.preventDefault();
         try{
             let basicInfo = await this.state.DMVInfo.LF.getBasicInformation(this.state.idSearch);
-        // alert(basicInfo);
             this.setState({basicInfo:basicInfo, basicInfoOpen:true});
         } catch(error) {
             this.setState({basicInfo:['',''], basicInfoOpen: false});
@@ -122,11 +105,14 @@ class App extends Component {
 
     idLookupChange = (event) => {
         this.setState({idSearch: event.target.value});
-        // console.log("***************** idSearch: ", this.state.idSearch);
     };
 
     closeBasicInfoModal = () =>{
         this.setState({basicInfoOpen: false});
+    };
+
+    closeCreateLicenseModal = () => {
+        this.setState({createLicenseOpen: false});
     };
 
   // **************************************************************************
@@ -139,30 +125,12 @@ class App extends Component {
   render() {
     const createLicenseButton = (
         <div>
-            <h1>create</h1>
-            <button onClick={this.displayCreateLicense} disabled={this.state.hasLicense}>
+            <h1>Welcome to the DMV</h1>
+            <button onClick={this.displayCreateLicenseModal} disabled={this.state.hasLicense}>
                 Create License
             </button>
         </div>
     );
-    let basicInfoDisplay;
-    console.log("****************** Basic info: ", this.state.basicInfoOpen);
-    // if(this.state.basicInfoOpen){
-    //     basicInfoDisplay = (
-    //         <LicenseModal
-    //             open={this.state.basicInfoOpen}
-    //             license={<LicenseInfoCard
-    //                 name={this.state.basicInfo[0]}
-    //                 dob={this.state.basicInfo[1]}
-    //                 lId={this.state.idSearch} />}
-    //         />
-            
-    //     );
-    // }
-    // else {
-    //     console.log('false');
-    //     basicInfoDisplay = ('');
-    // }
 
     return (
         <div>
@@ -196,6 +164,11 @@ class App extends Component {
                     lId={this.state.idSearch} />}
             />
 
+            <CreateLicenseModal
+                open={this.state.createLicenseOpen}
+                close={this.closeCreateLicenseModal}
+            />
+
              
         </div>
     );
@@ -210,38 +183,6 @@ class App extends Component {
 //         <input type="submit" value="Submit" />
 //     </form>
 // </div>
-
-
-
-  //   return (
-  //     <Provider store={store}>
-  //       <HashRouter>
-  //         <Container>
-  //           <TopBar state={this.state} />
-  //           <div>
-  //             <Route exact path="/" component={Greeting} />
-  //             <Route
-  //               exact
-  //               path="/myZombieInventory"
-  //               component={MyZombieInventory}
-  //             />
-  //             <Route
-  //               exact
-  //               path="/ZombieInventory"
-  //               component={ZombieInventory}
-  //             />
-  //             {/* routes used in zombie action modal */}
-  //             <Route exact path="/AttackZombie" component={AttackZombie} />
-  //             <Route exact path="/FeedOnKitty" component={FeedOnKitty} />
-  //             <Route exact path="/ChangeName" component={ChangeName} />
-  //             <Route exact path="/LevelUp" component={LevelUp} />
-  //             <Route exact path="/TransferZombie" component={TransferZombie} />
-  //           </div>
-  //         </Container>
-  //       </HashRouter>
-  //     </Provider>
-  //   );
-  // }
 }
 
 export default App;
