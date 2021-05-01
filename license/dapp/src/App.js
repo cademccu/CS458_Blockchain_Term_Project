@@ -4,6 +4,7 @@ import { assert } from "chai";
 import LicenseInfoCard from "./licenseInfoCard";
 import LicenseModal from "./LicenseModal";
 import CreateLicenseModal from "./CreateLicenseModal";
+import BasicInfoCard from "./basicInfoCard";
 
 //  Main application page
 
@@ -42,7 +43,6 @@ class App extends Component {
             let fullInfo = Array.from(x);
             fullInfo.shift();
             fullInfo.unshift(parseInt(id._hex));
-            console.log(fullInfo);
             this.setState({fullInfo: fullInfo});
         } catch (err) {
             console.log("Exception: ", err);
@@ -113,6 +113,7 @@ class App extends Component {
   // **************************************************************************
 
   render() {
+
     const createLicenseButton = (
         <div>
             <h4>Click bellow to start a new license.</h4>
@@ -159,7 +160,7 @@ class App extends Component {
             <LicenseModal
                 open={this.state.basicInfoOpen}
                 close={this.closeBasicInfoModal}
-                license={<LicenseInfoCard
+                license={<BasicInfoCard
                     name={this.state.basicInfo[0]}
                     dob={this.state.basicInfo[1]}
                     lId={this.state.idSearch} />}

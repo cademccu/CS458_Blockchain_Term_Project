@@ -20,10 +20,18 @@ class LicenseModal extends Component {
                 onClose={() => this.props.close()}
                 open={this.props.open}
             >
-                <Modal.Content>
+                <Modal.Content
+                    style={{
+                        backgroundColor: 'cadetblue',
+                    }}
+                >
                     {this.props.license}
                 </Modal.Content>
-                <Modal.Actions>
+                <Modal.Actions
+                    style={{
+                        backgroundColor: 'cadetblue',
+                    }}
+                >
                     <Button color='black' onClick={() => this.props.close()}>
                         Close
                     </Button>

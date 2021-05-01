@@ -43,7 +43,7 @@ const initBlockchain = async () => {
     "	  ]"
     );
 
-    DMV = new ethers.Contract('0x184cbB21AD503039CD8299ebad4cE53657A49087', abi, signer);
+    DMV = new ethers.Contract('0x9712EF176dA8C10Cc076D77D1A5779D415686107', abi, signer);
 
     let LF = null;
     console.log("READ LicenseFactory ABI");
