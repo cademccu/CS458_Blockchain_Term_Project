@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Modal, Button } from 'semantic-ui-react';
 import App from "./App";
+import initBlockchain from "./utils/initBlockchain";
 
 class CreateLicenseModal extends Component {
     constructor(props) {
@@ -57,11 +58,19 @@ class CreateLicenseModal extends Component {
 
     submitFunction = async (event) => {
         event.preventDefault();
-        let data = [this.state.name, this.state.dob, this.state.expDate,
-            this.state.address, this.state.cityState, this.state.gender];
-        // this.props.createLicense(data);
-        // App.createLicense(data);
-        // How do I pass back the data to the createLicense function in App.js?
+        try {
+            const DMVInfo = await initBlockchain();
+            await DMVInfo.LF.createLicense(
+                this.state.name,
+                this.state.dob,
+                this.state.expDate,
+                this.state.address,
+                this.state.cityState,
+                this.state.gender);
+                this.setState({hasLicense: true});
+        } catch (err) {
+            console.log("Exception: ", err);
+        }
         this.props.close();
     }
 
@@ -71,7 +80,11 @@ class CreateLicenseModal extends Component {
                 onClose={() => this.props.close()}
                 open={this.props.open}
             >
-                <Modal.Content>
+                <Modal.Content
+                    style={{
+                        backgroundColor: 'cadetblue'
+                    }}
+                >
                     <form className="create form" onSubmit={this.submitFunction}>
                         <div><label>Name</label></div>
                         <div>
@@ -100,7 +113,11 @@ class CreateLicenseModal extends Component {
                         <button className="ui button" type="submit">Submit</button>
                     </form>
                 </Modal.Content>
-                <Modal.Actions>
+                <Modal.Actions
+                    style={{
+                        backgroundColor: 'cadetblue'
+                    }}
+                >
                     <Button color='black' onClick={() => this.props.close()}>
                         Close
                     </Button>

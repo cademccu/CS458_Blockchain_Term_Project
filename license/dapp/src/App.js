@@ -68,16 +68,6 @@ class App extends Component {
         }
     }
 
-    createLicense = async (data) => {
-        try {
-            await this.state.DMVInfo.LF.createLicense(data[0], data[1], data[2], data[3], data[4], data[5]);
-            this.setState({hasLicense: true});
-            this.getFullInfo();
-        } catch (error) {
-            console.log("Exception: ", error);
-        }
-    }
-
     displayFullInformation = async () => {
         try {
             const id = await this.state.DMVInfo.LF.ownerToLicense(this.state.DMVInfo.userAddress);
@@ -125,15 +115,26 @@ class App extends Component {
   render() {
     const createLicenseButton = (
         <div>
-            <h1>Welcome to the DMV</h1>
+            <h4>Click bellow to start a new license.</h4>
             <button onClick={this.displayCreateLicenseModal} disabled={this.state.hasLicense}>
                 Create License
             </button>
         </div>
     );
 
-    return (
+    const welcomeHeader = (
         <div>
+            <h1>Welcome to the DMV</h1>
+        </div>
+    );
+
+    return (
+        <div
+            style={{
+                backgroundColor: 'cadetblue',
+            }}
+        >
+            {welcomeHeader}
             {createLicenseButton}
             <LicenseInfoCard 
                 lId={this.state.fullInfo[0]}
@@ -173,16 +174,6 @@ class App extends Component {
         </div>
     );
     }
-
-//     <div>
-//     <form id="ui form" onSubmit={this.submitFunction}>
-//         <label>License lookup
-//             <input type="number" value={this.state.idSearch} onChange={this.idLookupChange} />
-//         </label>
-//         {basicInfoDisplay}
-//         <input type="submit" value="Submit" />
-//     </form>
-// </div>
 }
 
 export default App;
